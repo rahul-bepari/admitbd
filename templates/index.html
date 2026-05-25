@@ -1,42 +1,124 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="text-center mb-10">
-    <h1 class="text-4xl font-bold text-blue-700 mb-3">🎓 AdmitBD</h1>
-    <p class="text-gray-500 text-lg">Bangladesh's smartest university admission tracker</p>
-</div>
-
-<!-- Quick links -->
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
-    <a href="/universities" class="bg-white rounded-xl shadow p-6 text-center hover:shadow-md transition">
-        <div class="text-4xl mb-3">🏫</div>
-        <h2 class="text-lg font-semibold text-blue-700">Universities</h2>
-        <p class="text-sm text-gray-500 mt-1">Browse all tracked universities</p>
-    </a>
-    <a href="/checker" class="bg-white rounded-xl shadow p-6 text-center hover:shadow-md transition">
-        <div class="text-4xl mb-3">✅</div>
-        <h2 class="text-lg font-semibold text-blue-700">Eligibility Checker</h2>
-        <p class="text-sm text-gray-500 mt-1">Check which universities you qualify for</p>
-    </a>
-    <a href="/deadlines" class="bg-white rounded-xl shadow p-6 text-center hover:shadow-md transition">
-        <div class="text-4xl mb-3">📅</div>
-        <h2 class="text-lg font-semibold text-blue-700">Deadlines</h2>
-        <p class="text-sm text-gray-500 mt-1">See upcoming application deadlines</p>
-    </a>
-</div>
-
-<!-- University list -->
-<h2 class="text-2xl font-bold mb-5 text-gray-700">Tracked Universities</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-    {% for uni in universities %}
-    <a href="/university/{{ uni.id }}" class="bg-white rounded-xl shadow p-5 hover:shadow-md transition">
-        <div class="flex justify-between items-center">
-            <div>
-                <h3 class="font-semibold text-blue-700 text-lg">{{ uni.name }}</h3>
-                <p class="text-sm text-gray-400">{{ uni.location }}</p>
-            </div>
-            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">{{ uni.short_name }}</span>
+<!-- Hero Section -->
+<div class="relative overflow-hidden rounded-2xl mb-10"
+    style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-4 left-10 w-32 h-32 rounded-full bg-white"></div>
+        <div class="absolute bottom-4 right-10 w-48 h-48 rounded-full bg-white"></div>
+        <div class="absolute top-16 right-32 w-16 h-16 rounded-full bg-white"></div>
+    </div>
+    <div class="relative px-8 py-14 text-center">
+        <div class="inline-block bg-white bg-opacity-20 text-white text-xs font-semibold px-4 py-1 rounded-full mb-4 tracking-widest uppercase">
+            Bangladesh University Admissions
         </div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight">
+            Find Your <span class="text-cyan-200">Dream University</span>
+        </h1>
+        <p class="text-blue-100 text-lg mb-8 max-w-xl mx-auto">
+            Track admission circulars, check eligibility, and never miss a deadline — all in one place.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+            <a href="/universities"
+                class="bg-white text-blue-700 font-bold px-6 py-3 rounded-xl hover:bg-blue-50 transition shadow-lg text-sm">
+                🏫 Browse Universities
+            </a>
+            <a href="/checker"
+                class="bg-blue-800 bg-opacity-60 text-white font-bold px-6 py-3 rounded-xl hover:bg-opacity-80 transition text-sm border border-blue-300 border-opacity-40">
+                ✅ Check Eligibility
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Bar -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+    <div class="bg-white rounded-2xl shadow p-5 text-center">
+        <div class="text-3xl font-extrabold text-blue-700">{{ universities|length }}</div>
+        <div class="text-xs text-gray-400 mt-1 font-medium uppercase tracking-wide">Universities</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-5 text-center">
+        <div class="text-3xl font-extrabold text-green-600">{{ universities|selectattr('type','equalto','public')|list|length }}</div>
+        <div class="text-xs text-gray-400 mt-1 font-medium uppercase tracking-wide">Public</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-5 text-center">
+        <div class="text-3xl font-extrabold text-orange-500">{{ universities|selectattr('type','equalto','private')|list|length }}</div>
+        <div class="text-xs text-gray-400 mt-1 font-medium uppercase tracking-wide">Private</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-5 text-center">
+        <div class="text-3xl font-extrabold text-purple-600">{{ universities|selectattr('type','equalto','international')|list|length }}</div>
+        <div class="text-xs text-gray-400 mt-1 font-medium uppercase tracking-wide">International</div>
+    </div>
+</div>
+
+<!-- Feature Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-12">
+    <a href="/universities"
+        class="group bg-white rounded-2xl shadow p-6 hover:shadow-lg transition border border-transparent hover:border-blue-100">
+        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-blue-200 transition">🏫</div>
+        <h2 class="text-base font-bold text-gray-800 mb-1">Universities</h2>
+        <p class="text-sm text-gray-400">Browse all public, private & international universities tracked by AdmitBD.</p>
+        <div class="mt-4 text-blue-600 text-sm font-semibold">Explore →</div>
+    </a>
+    <a href="/checker"
+        class="group bg-white rounded-2xl shadow p-6 hover:shadow-lg transition border border-transparent hover:border-green-100">
+        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-green-200 transition">✅</div>
+        <h2 class="text-base font-bold text-gray-800 mb-1">Eligibility Checker</h2>
+        <p class="text-sm text-gray-400">Enter your SSC & HSC GPA and instantly see which universities you qualify for.</p>
+        <div class="mt-4 text-green-600 text-sm font-semibold">Check now →</div>
+    </a>
+    <a href="/deadlines"
+        class="group bg-white rounded-2xl shadow p-6 hover:shadow-lg transition border border-transparent hover:border-orange-100">
+        <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-orange-200 transition">📅</div>
+        <h2 class="text-base font-bold text-gray-800 mb-1">Deadlines</h2>
+        <p class="text-sm text-gray-400">See all upcoming admission deadlines sorted by date so you never miss one.</p>
+        <div class="mt-4 text-orange-500 text-sm font-semibold">View deadlines →</div>
+    </a>
+</div>
+
+<!-- AI Advisor Banner -->
+<div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-6 mb-12 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div>
+        <div class="text-white font-bold text-lg mb-1">🤖 AI Admission Advisor</div>
+        <p class="text-purple-200 text-sm">Ask anything about university admissions in Bangladesh — powered by AI.</p>
+    </div>
+    <a href="/advisor"
+        class="shrink-0 bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:bg-purple-50 transition text-sm shadow">
+        Chat with AI →
+    </a>
+</div>
+
+<!-- University List -->
+<div class="flex items-center justify-between mb-5">
+    <h2 class="text-xl font-bold text-gray-800">All Tracked Universities</h2>
+    <a href="/universities" class="text-sm text-blue-600 font-medium hover:underline">View all →</a>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {% for uni in universities %}
+    <a href="/university/{{ uni.id }}"
+        class="bg-white rounded-2xl shadow p-4 hover:shadow-md transition flex items-center justify-between group">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs
+                {% if uni.type == 'public' %}bg-green-100 text-green-700
+                {% elif uni.type == 'international' %}bg-blue-100 text-blue-700
+                {% elif uni.type == 'cbhe' %}bg-purple-100 text-purple-700
+                {% else %}bg-orange-100 text-orange-700{% endif %}">
+                {{ uni.short_name[:3] }}
+            </div>
+            <div>
+                <div class="text-sm font-semibold text-gray-800 group-hover:text-blue-700 transition leading-tight">{{ uni.name }}</div>
+                <div class="text-xs text-gray-400">📍 {{ uni.location }}</div>
+            </div>
+        </div>
+        <span class="text-xs font-bold px-2 py-1 rounded-full shrink-0
+            {% if uni.type == 'public' %}bg-green-100 text-green-700
+            {% elif uni.type == 'international' %}bg-blue-100 text-blue-700
+            {% elif uni.type == 'cbhe' %}bg-purple-100 text-purple-700
+            {% else %}bg-orange-100 text-orange-700{% endif %}">
+            {{ (uni.type or 'private')|capitalize }}
+        </span>
     </a>
     {% endfor %}
 </div>
