@@ -45,19 +45,22 @@ def checker():
     if request.method == "POST":
         ssc = float(request.form.get("ssc", 0))
         hsc = float(request.form.get("hsc", 0))
-        circulars = supabase.table("circulars").select("*, universities(name, short_name, website)").execute()
+        circulars = supabase.table("circulars").select("*, universities(name, short_name, website, location)").execute()
         for c in circulars.data:
-            min_ssc = c.get("min_ssc_gpa") or 0
-            min_hsc = c.get("min_hsc_gpa") or 0
+            min_ssc = c.get("min_ssc_gpa")
+            min_hsc = c.get("min_hsc_gpa")
+            if min_ssc is None or min_hsc is None:
+                continue  # skip circulars with no GPA data
             if ssc >= min_ssc and hsc >= min_hsc:
                 matches.append(c)
     return render_template("checker.html", matches=matches, ssc=ssc, hsc=hsc)
 
 @app.route("/deadlines")
 def deadlines():
-    circulars = supabase.table("circulars").select("*, universities(name, short_name)").order("apply_end").execute()
+    circulars = supabase.table("circulars").select("*, universities(name, short_name, location)")\
+        .not_.is_("apply_end", "null")\
+        .order("apply_end").execute()
     return render_template("deadlines.html", circulars=circulars.data)
-
 
 @app.route("/advisor", methods=["GET", "POST"])
 def advisor():
@@ -65,11 +68,11 @@ def advisor():
     question = None
     if request.method == "POST":
         question = request.form.get("question", "")
-        
+
         # Get all universities + circulars from DB
         unis = supabase.table("universities").select("*").execute().data
         circulars = supabase.table("circulars").select("*, universities(name, short_name)").execute().data
-        
+
         # Build context string for Groq
         context = "Here is the current university admission data in Bangladesh:\n\n"
         for c in circulars:
