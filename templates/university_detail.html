@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Back button -->
+<a href="/universities" class="text-blue-500 text-sm hover:underline">← Back to Universities</a>
+
+<!-- University Header -->
+<div class="bg-white rounded-xl shadow p-6 mt-4 mb-6">
+    <div class="flex justify-between items-start">
+        <div>
+            <h1 class="text-2xl font-bold text-blue-700">{{ uni.name }}</h1>
+            <p class="text-gray-400 mt-1">📍 {{ uni.location }}</p>
+            <a href="{{ uni.website }}" target="_blank" class="text-blue-400 text-sm hover:underline">
+                {{ uni.website }}
+            </a>
+        </div>
+        <span class="bg-blue-100 text-blue-700 font-bold px-4 py-2 rounded-full text-sm">
+            {{ uni.short_name }}
+        </span>
+    </div>
+</div>
+
+<!-- Latest Circular -->
+<h2 class="text-xl font-bold text-gray-700 mb-4">📋 Latest Admission Circular</h2>
+
+{% if circular %}
+<div class="bg-white rounded-xl shadow p-6">
+    <div class="grid grid-cols-2 gap-4 text-sm">
+        <div class="bg-gray-50 rounded-lg p-4">
+            <p class="text-gray-400 text-xs mb-1">Application Start</p>
+            <p class="font-semibold">{{ circular.apply_start or "Not announced" }}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-4">
+            <p class="text-gray-400 text-xs mb-1">Application End</p>
+            <p class="font-semibold">{{ circular.apply_end or "Not announced" }}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-4">
+            <p class="text-gray-400 text-xs mb-1">Minimum SSC GPA</p>
+            <p class="font-semibold">{{ circular.min_ssc_gpa or "Not specified" }}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-4">
+            <p class="text-gray-400 text-xs mb-1">Minimum HSC GPA</p>
+            <p class="font-semibold">{{ circular.min_hsc_gpa or "Not specified" }}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-4">
+            <p class="text-gray-400 text-xs mb-1">Application Fee</p>
+            <p class="font-semibold">
+                {% if circular.application_fee %}
+                    ৳{{ circular.application_fee }}
+                {% else %}
+                    Not specified
+                {% endif %}
+            </p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-4">
+            <p class="text-gray-400 text-xs mb-1">Eligible Groups</p>
+            <p class="font-semibold">{{ circular.eligible_groups or "Not specified" }}</p>
+        </div>
+    </div>
+
+    <div class="mt-4 bg-gray-50 rounded-lg p-4 text-sm">
+        <p class="text-gray-400 text-xs mb-1">Required Documents</p>
+        <p class="font-semibold">{{ circular.required_documents or "Not specified" }}</p>
+    </div>
+
+    <div class="mt-4 text-right">
+        <a href="{{ circular.source_url }}" target="_blank"
+           class="text-xs text-blue-400 hover:underline">View source page →</a>
+    </div>
+</div>
+
+{% else %}
+<div class="bg-white rounded-xl shadow p-6 text-center text-gray-400">
+    No circular data available yet. Check back later.
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdmitBD — Bangladesh University Admissions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-700 text-white px-6 py-4 flex justify-between items-center shadow">
+        <a href="/" class="text-xl font-bold tracking-wide">🎓 AdmitBD</a>
+        <div class="flex gap-6 text-sm font-medium">
+            <a href="/" class="hover:text-blue-200">Home</a>
+            <a href="/universities" class="hover:text-blue-200">Universities</a>
+            <a href="/checker" class="hover:text-blue-200">Eligibility Checker</a>
+            <a href="/deadlines" class="hover:text-blue-200">Deadlines</a>
+            <a href="/advisor" class="hover:text-blue-200">AI Advisor</a>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main class="max-w-5xl mx-auto px-4 py-10">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="text-center text-gray-400 text-sm py-6 mt-10 border-t">
+        © 2025 AdmitBD — Built for Bangladesh students
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="text-3xl font-bold text-blue-700 mb-2">📅 Application Deadlines</h1>
+<p class="text-gray-500 mb-8">Upcoming admission deadlines sorted by date</p>
+
+{% if circulars %}
+<div class="flex flex-col gap-4">
+    {% for c in circulars %}
+    <div class="bg-white rounded-xl shadow p-5">
+        <div class="flex justify-between items-start">
+            <div>
+                <h3 class="font-semibold text-blue-700 text-lg">
+                    {{ c.universities.name if c.universities else "Unknown University" }}
+                </h3>
+                <p class="text-sm text-gray-400 mt-1">
+                    {{ c.universities.short_name if c.universities else "" }}
+                </p>
+            </div>
+            {% if c.apply_end %}
+            <span class="bg-red-100 text-red-600 text-xs font-bold px-3 py-1 rounded-full">
+                📅 {{ c.apply_end }}
+            </span>
+            {% else %}
+            <span class="bg-gray-100 text-gray-400 text-xs font-bold px-3 py-1 rounded-full">
+                Date TBA
+            </span>
+            {% endif %}
+        </div>
+
+        <div class="mt-3 grid grid-cols-2 gap-2 text-sm text-gray-500">
+            <p>Start: <span class="font-medium text-gray-700">{{ c.apply_start or "Not announced" }}</span></p>
+            <p>End: <span class="font-medium text-gray-700">{{ c.apply_end or "Not announced" }}</span></p>
+            <p>Min SSC: <span class="font-medium text-gray-700">{{ c.min_ssc_gpa or "Not specified" }}</span></p>
+            <p>Min HSC: <span class="font-medium text-gray-700">{{ c.min_hsc_gpa or "Not specified" }}</span></p>
+        </div>
+
+        <div class="mt-3 text-right">
+            <a href="{{ c.source_url }}" target="_blank"
+               class="text-xs text-blue-400 hover:underline">View circular →</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="bg-white rounded-xl shadow p-6 text-center text-gray-400">
+    No deadline information available yet. Check back when circulars are posted.
+</div>
+{% endif %}
+
+{% endblock %}
