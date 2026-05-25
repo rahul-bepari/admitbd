@@ -21,6 +21,20 @@ def get_latest_circular(university_id):
         return result.data[0]
     return None
 
+def get_university_image(name):
+    try:
+        import requests
+        search = name.replace(" ", "_")
+        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{search}"
+        res = requests.get(url, timeout=5)
+        if res.status_code == 200:
+            data = res.json()
+            return data.get("thumbnail", {}).get("source", None)
+    except:
+        pass
+    return None
+
+
 @app.route("/")
 def home():
     universities = get_universities()
@@ -36,7 +50,8 @@ def university_detail(uni_id):
     result = supabase.table("universities").select("*").eq("id", uni_id).execute()
     uni = result.data[0] if result.data else None
     circular = get_latest_circular(uni_id)
-    return render_template("university_detail.html", uni=uni, circular=circular)
+    image_url = get_university_image(uni["name"]) if uni else None
+    return render_template("university_detail.html", uni=uni, circular=circular, image_url=image_url)
 
 @app.route("/checker", methods=["GET", "POST"])
 def checker():

@@ -7,52 +7,64 @@
 </a>
 
 <!-- University Header Card -->
-<div class="relative overflow-hidden bg-white rounded-2xl shadow-lg p-6 mb-6 border border-gray-100">
-    <div class="flex justify-between items-start gap-4">
-        <div class="flex-1">
-            <!-- Type badge -->
-            <div class="mb-2">
-                {% if uni.type == 'public' %}
-                <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">🏛️ Public University</span>
-                {% elif uni.type == 'international' %}
-                <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">🌐 International University</span>
-                {% elif uni.type == 'cbhe' %}
-                <span class="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">🎓 CBHE University</span>
-                {% else %}
-                <span class="bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full">🏫 Private University</span>
+<div class="relative overflow-hidden rounded-2xl shadow-lg mb-6 border border-gray-100 min-h-48">
+
+    <!-- Background image -->
+    {% if image_url %}
+    <div class="absolute inset-0 bg-cover bg-center"
+        style="background-image: url('{{ image_url }}');">
+        <div class="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+    </div>
+    {% else %}
+    <div class="absolute inset-0"
+        style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 60%, #06b6d4 100%);">
+    </div>
+    {% endif %}
+
+    <!-- Content on top of background -->
+    <div class="relative p-6">
+        <div class="flex justify-between items-start gap-4">
+            <div class="flex-1">
+                <!-- Type badge -->
+                <div class="mb-2">
+                    {% if uni.type == 'public' %}
+                    <span class="bg-green-500 bg-opacity-90 text-white text-xs font-bold px-3 py-1 rounded-full">🏛️ Public University</span>
+                    {% elif uni.type == 'international' %}
+                    <span class="bg-blue-500 bg-opacity-90 text-white text-xs font-bold px-3 py-1 rounded-full">🌐 International University</span>
+                    {% elif uni.type == 'cbhe' %}
+                    <span class="bg-purple-500 bg-opacity-90 text-white text-xs font-bold px-3 py-1 rounded-full">🎓 CBHE University</span>
+                    {% else %}
+                    <span class="bg-orange-500 bg-opacity-90 text-white text-xs font-bold px-3 py-1 rounded-full">🏫 Private University</span>
+                    {% endif %}
+                </div>
+                <h1 class="text-2xl font-extrabold text-white leading-tight mb-2">{{ uni.name }}</h1>
+                <p class="text-sm text-gray-300 mb-2">📍 {{ uni.location }}</p>
+                {% if uni.website %}
+                <a href="{{ uni.website }}" target="_blank"
+                    class="inline-flex items-center gap-1 text-sm text-blue-300 hover:text-white transition">
+                    🔗 {{ uni.website }}
+                </a>
                 {% endif %}
             </div>
-            <h1 class="text-2xl font-extrabold text-gray-800 leading-tight mb-2">{{ uni.name }}</h1>
-            <p class="text-sm text-gray-400 mb-2">📍 {{ uni.location }}</p>
-            {% if uni.website %}
-            <a href="{{ uni.website }}" target="_blank"
-                class="inline-flex items-center gap-1 text-sm text-blue-500 hover:text-blue-700 hover:underline transition">
-                🔗 {{ uni.website }}
+            <div class="shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center font-extrabold text-sm text-center bg-white bg-opacity-20 text-white backdrop-blur-sm border border-white border-opacity-30">
+                {{ uni.short_name }}
+            </div>
+        </div>
+
+        <!-- Quick action buttons -->
+        <div class="flex flex-wrap gap-2 mt-5 pt-5 border-t border-white border-opacity-20">
+            <a href="/checker" class="bg-white bg-opacity-20 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-opacity-30 transition border border-white border-opacity-20">
+                ✅ Check My Eligibility
+            </a>
+            {% if uni.notice_url %}
+            <a href="{{ uni.notice_url }}" target="_blank" class="bg-white bg-opacity-20 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-opacity-30 transition border border-white border-opacity-20">
+                📋 Official Admission Page →
             </a>
             {% endif %}
+            <a href="/advisor" class="bg-white bg-opacity-20 backdrop-blur-sm text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-opacity-30 transition border border-white border-opacity-20">
+                🤖 Ask AI Advisor
+            </a>
         </div>
-        <div class="shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center font-extrabold text-sm text-center
-            {% if uni.type == 'public' %}bg-green-100 text-green-700
-            {% elif uni.type == 'international' %}bg-blue-100 text-blue-700
-            {% elif uni.type == 'cbhe' %}bg-purple-100 text-purple-700
-            {% else %}bg-orange-100 text-orange-700{% endif %}">
-            {{ uni.short_name }}
-        </div>
-    </div>
-
-    <!-- Quick action buttons -->
-    <div class="flex flex-wrap gap-2 mt-5 pt-5 border-t border-gray-100">
-        <a href="/checker" class="bg-green-50 text-green-700 text-xs font-semibold px-4 py-2 rounded-xl hover:bg-green-100 transition">
-            ✅ Check My Eligibility
-        </a>
-        {% if uni.notice_url %}
-        <a href="{{ uni.notice_url }}" target="_blank" class="bg-blue-50 text-blue-700 text-xs font-semibold px-4 py-2 rounded-xl hover:bg-blue-100 transition">
-            📋 Official Admission Page →
-        </a>
-        {% endif %}
-        <a href="/advisor" class="bg-purple-50 text-purple-700 text-xs font-semibold px-4 py-2 rounded-xl hover:bg-purple-100 transition">
-            🤖 Ask AI Advisor
-        </a>
     </div>
 </div>
 
