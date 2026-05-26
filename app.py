@@ -21,24 +21,22 @@ def get_latest_circular(university_id):
         return result.data[0]
     return None
 
-def get_university_image(name):
+def get_university_image(website):
     try:
         import requests
-        # Try multiple search variations
-        searches = [
-            name.replace(" ", "_"),
-            name.replace(",", "").replace(" ", "_"),
-            name.split(",")[0].replace(" ", "_"),  # e.g. "Independent_University"
-        ]
-        for search in searches:
-            url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{search}"
-            res = requests.get(url, timeout=5)
-            if res.status_code == 200:
-                data = res.json()
-                img = data.get("originalimage", {}).get("source") or \
-                      data.get("thumbnail", {}).get("source")
-                if img:
-                    return img
+        from bs4 import BeautifulSoup
+        if not website:
+            return None
+        res = requests.get(website, timeout=6, verify=False)
+        soup = BeautifulSoup(res.text, "html.parser")
+        # Try og:image first
+        og = soup.find("meta", property="og:image")
+        if og and og.get("content"):
+            return og["content"]
+        # Try twitter:image
+        tw = soup.find("meta", attrs={"name": "twitter:image"})
+        if tw and tw.get("content"):
+            return tw["content"]
     except:
         pass
     return None
@@ -59,7 +57,7 @@ def university_detail(uni_id):
     result = supabase.table("universities").select("*").eq("id", uni_id).execute()
     uni = result.data[0] if result.data else None
     circular = get_latest_circular(uni_id)
-    image_url = get_university_image(uni["name"]) if uni else None
+    image_url = get_university_image(uni.get("website")) if uni else None
     return render_template("university_detail.html", uni=uni, circular=circular, image_url=image_url)
 
 @app.route("/checker", methods=["GET", "POST"])
