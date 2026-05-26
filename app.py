@@ -24,12 +24,21 @@ def get_latest_circular(university_id):
 def get_university_image(name):
     try:
         import requests
-        search = name.replace(" ", "_")
-        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{search}"
-        res = requests.get(url, timeout=5)
-        if res.status_code == 200:
-            data = res.json()
-            return data.get("thumbnail", {}).get("source", None)
+        # Try multiple search variations
+        searches = [
+            name.replace(" ", "_"),
+            name.replace(",", "").replace(" ", "_"),
+            name.split(",")[0].replace(" ", "_"),  # e.g. "Independent_University"
+        ]
+        for search in searches:
+            url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{search}"
+            res = requests.get(url, timeout=5)
+            if res.status_code == 200:
+                data = res.json()
+                img = data.get("originalimage", {}).get("source") or \
+                      data.get("thumbnail", {}).get("source")
+                if img:
+                    return img
     except:
         pass
     return None
