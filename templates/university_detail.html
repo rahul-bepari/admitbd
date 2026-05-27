@@ -12,9 +12,9 @@
     <!-- Background image -->
     {% if image_url %}
     <div class="absolute inset-0 bg-cover bg-center"
-        style="background-image: url('{{ image_url }}');">
-        <div class="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/80 to-gray-900/40"></div>
+        style="background-image: url('{{ image_url }}'); filter: blur(2px); transform: scale(1.05);">
     </div>
+    <div class="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/80 to-gray-900/40"></div>
     {% else %}
     <div class="absolute inset-0"
         style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 60%, #06b6d4 100%);">
