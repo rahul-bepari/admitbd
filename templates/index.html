@@ -5,7 +5,7 @@
 <div id="bg-slideshow" class="fixed inset-0 -z-10">
     <div id="bg-slide" class="absolute inset-0 bg-cover bg-center"
         style="opacity: 0; transition: opacity 1s ease-in-out;"></div>
-    <div class="absolute inset-0 bg-white bg-opacity-80"></div>
+    <div class="absolute inset-0 bg-white bg-opacity-60"></div>
 </div>
 
 <script>
@@ -36,7 +36,7 @@ function nextSlide() {
 slide.style.backgroundImage = `url('${images[0]}')`;
 slide.style.opacity = '1';
 current = 1;
-setInterval(nextSlide, 5000);
+setInterval(nextSlide, 20000);
 </script>
 
 <!-- Hero Section -->
@@ -72,45 +72,45 @@ setInterval(nextSlide, 5000);
 
 <!-- Stats Bar -->
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-    <div class="bg-white rounded-2xl shadow p-5 text-center">
+    <div class="rounded-2xl p-5 text-center" style="background: rgba(255,255,255,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
         <div class="text-3xl font-extrabold text-blue-700">{{ universities|length }}</div>
-        <div class="text-xs text-gray-400 mt-1 font-medium uppercase tracking-wide">Universities</div>
+        <div class="text-xs text-gray-500 mt-1 font-medium uppercase tracking-wide">Universities</div>
     </div>
-    <div class="bg-white rounded-2xl shadow p-5 text-center">
+    <div class="rounded-2xl p-5 text-center" style="background: rgba(255,255,255,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
         <div class="text-3xl font-extrabold text-green-600">{{ universities|selectattr('type','equalto','public')|list|length }}</div>
-        <div class="text-xs text-gray-400 mt-1 font-medium uppercase tracking-wide">Public</div>
+        <div class="text-xs text-gray-500 mt-1 font-medium uppercase tracking-wide">Public</div>
     </div>
-    <div class="bg-white rounded-2xl shadow p-5 text-center">
+    <div class="rounded-2xl p-5 text-center" style="background: rgba(255,255,255,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
         <div class="text-3xl font-extrabold text-orange-500">{{ universities|selectattr('type','equalto','private')|list|length }}</div>
-        <div class="text-xs text-gray-400 mt-1 font-medium uppercase tracking-wide">Private</div>
+        <div class="text-xs text-gray-500 mt-1 font-medium uppercase tracking-wide">Private</div>
     </div>
-    <div class="bg-white rounded-2xl shadow p-5 text-center">
+    <div class="rounded-2xl p-5 text-center" style="background: rgba(255,255,255,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
         <div class="text-3xl font-extrabold text-purple-600">{{ universities|selectattr('type','equalto','international')|list|length }}</div>
-        <div class="text-xs text-gray-400 mt-1 font-medium uppercase tracking-wide">International</div>
+        <div class="text-xs text-gray-500 mt-1 font-medium uppercase tracking-wide">International</div>
     </div>
 </div>
 
 <!-- Feature Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-12">
-    <a href="/universities"
-        class="group bg-white rounded-2xl shadow p-6 hover:shadow-lg transition border border-transparent hover:border-blue-100">
+    <a href="/universities" class="group rounded-2xl p-6 hover:shadow-lg transition block"
+        style="background: rgba(255,255,255,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
         <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-blue-200 transition">🏫</div>
         <h2 class="text-base font-bold text-gray-800 mb-1">Universities</h2>
-        <p class="text-sm text-gray-400">Browse all public, private & international universities tracked by AdmitBD.</p>
+        <p class="text-sm text-gray-500">Browse all public, private & international universities tracked by AdmitBD.</p>
         <div class="mt-4 text-blue-600 text-sm font-semibold">Explore →</div>
     </a>
-    <a href="/checker"
-        class="group bg-white rounded-2xl shadow p-6 hover:shadow-lg transition border border-transparent hover:border-green-100">
+    <a href="/checker" class="group rounded-2xl p-6 hover:shadow-lg transition block"
+        style="background: rgba(255,255,255,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
         <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-green-200 transition">✅</div>
         <h2 class="text-base font-bold text-gray-800 mb-1">Eligibility Checker</h2>
-        <p class="text-sm text-gray-400">Enter your SSC & HSC GPA and instantly see which universities you qualify for.</p>
+        <p class="text-sm text-gray-500">Enter your SSC & HSC GPA and instantly see which universities you qualify for.</p>
         <div class="mt-4 text-green-600 text-sm font-semibold">Check now →</div>
     </a>
-    <a href="/deadlines"
-        class="group bg-white rounded-2xl shadow p-6 hover:shadow-lg transition border border-transparent hover:border-orange-100">
+    <a href="/deadlines" class="group rounded-2xl p-6 hover:shadow-lg transition block"
+        style="background: rgba(255,255,255,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
         <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-orange-200 transition">📅</div>
         <h2 class="text-base font-bold text-gray-800 mb-1">Deadlines</h2>
-        <p class="text-sm text-gray-400">See all upcoming admission deadlines sorted by date so you never miss one.</p>
+        <p class="text-sm text-gray-500">See all upcoming admission deadlines sorted by date so you never miss one.</p>
         <div class="mt-4 text-orange-500 text-sm font-semibold">View deadlines →</div>
     </a>
 </div>
