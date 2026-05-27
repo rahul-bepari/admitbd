@@ -21,27 +21,6 @@ def get_latest_circular(university_id):
         return result.data[0]
     return None
 
-def get_university_image(website):
-    try:
-        import requests
-        from bs4 import BeautifulSoup
-        if not website:
-            return None
-        res = requests.get(website, timeout=6, verify=False)
-        soup = BeautifulSoup(res.text, "html.parser")
-        # Try og:image first
-        og = soup.find("meta", property="og:image")
-        if og and og.get("content"):
-            return og["content"]
-        # Try twitter:image
-        tw = soup.find("meta", attrs={"name": "twitter:image"})
-        if tw and tw.get("content"):
-            return tw["content"]
-    except:
-        pass
-    return None
-
-
 @app.route("/")
 def home():
     universities = get_universities()
@@ -57,7 +36,7 @@ def university_detail(uni_id):
     result = supabase.table("universities").select("*").eq("id", uni_id).execute()
     uni = result.data[0] if result.data else None
     circular = get_latest_circular(uni_id)
-    image_url = get_university_image(uni.get("website")) if uni else None
+    image_url = uni.get("image_url") if uni else None
     return render_template("university_detail.html", uni=uni, circular=circular, image_url=image_url)
 
 @app.route("/checker", methods=["GET", "POST"])
@@ -72,7 +51,7 @@ def checker():
             min_ssc = c.get("min_ssc_gpa")
             min_hsc = c.get("min_hsc_gpa")
             if min_ssc is None or min_hsc is None:
-                continue  # skip circulars with no GPA data
+                continue
             if ssc >= min_ssc and hsc >= min_hsc:
                 matches.append(c)
     return render_template("checker.html", matches=matches, ssc=ssc, hsc=hsc)
@@ -91,11 +70,9 @@ def advisor():
     if request.method == "POST":
         question = request.form.get("question", "")
 
-        # Get all universities + circulars from DB
         unis = supabase.table("universities").select("*").execute().data
         circulars = supabase.table("circulars").select("*, universities(name, short_name)").execute().data
 
-        # Build context string for Groq
         context = "Here is the current university admission data in Bangladesh:\n\n"
         for c in circulars:
             uni_name = c.get("universities", {}).get("name", "Unknown")
