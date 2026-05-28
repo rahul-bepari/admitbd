@@ -1,31 +1,82 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1 class="text-3xl font-bold text-blue-700 mb-2">🏫 Universities</h1>
-<p class="text-gray-500 mb-6">All universities tracked by AdmitBD</p>
-
-<input type="text" id="searchInput" onkeyup="filterCards()" placeholder="🔍 Search universities..."
-    class="w-full border border-gray-200 rounded-xl px-4 py-2 mb-5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
-
-<div class="flex gap-2 flex-wrap mb-6" id="filterBtns">
-    <button onclick="setFilter('all', this)" class="filter-btn active-filter px-4 py-1 rounded-full text-sm font-medium border">All</button>
-    <button onclick="setFilter('public', this)" class="filter-btn px-4 py-1 rounded-full text-sm font-medium border border-gray-200 text-gray-600">Public</button>
-    <button onclick="setFilter('private', this)" class="filter-btn px-4 py-1 rounded-full text-sm font-medium border border-gray-200 text-gray-600">Private</button>
-    <button onclick="setFilter('international', this)" class="filter-btn px-4 py-1 rounded-full text-sm font-medium border border-gray-200 text-gray-600">International</button>
-    <button onclick="setFilter('cbhe', this)" class="filter-btn px-4 py-1 rounded-full text-sm font-medium border border-gray-200 text-gray-600">CBHE</button>
+<!-- Slideshow Background (same as index.html) -->
+<div id="bg-slideshow" class="fixed inset-0 -z-10">
+    <div id="bg-slide" class="absolute inset-0 bg-cover bg-center"
+        style="opacity: 0; transition: opacity 1s ease-in-out;"></div>
+    <div class="absolute inset-0 bg-white bg-opacity-60"></div>
 </div>
 
+<script>
+const images = [
+    "/static/images/uni1.png",
+    "/static/images/uni2.png",
+    "/static/images/uni3.png",
+    "/static/images/uni4.png",
+    "/static/images/uni5.png",
+    "/static/images/uni6.png",
+    "/static/images/uni7.png",
+    "/static/images/uni8.png",
+    "/static/images/uni9.png",
+    "/static/images/uni10.png",
+    "/static/images/uni11.png",
+    "/static/images/uni12.png"
+];
+let current = 0;
+const slide = document.getElementById('bg-slide');
+function nextSlide() {
+    slide.style.opacity = '0';
+    setTimeout(() => {
+        slide.style.backgroundImage = `url('${images[current]}')`;
+        slide.style.opacity = '1';
+        current = (current + 1) % images.length;
+    }, 1000);
+}
+slide.style.backgroundImage = `url('${images[0]}')`;
+slide.style.opacity = '1';
+current = 1;
+setInterval(nextSlide, 20000);
+</script>
+
+<!-- Page Header -->
+<div class="mb-6">
+    <h1 class="text-3xl font-bold text-blue-700 mb-1">🏫 Universities</h1>
+    <p class="text-gray-600">All universities tracked by AdmitBD</p>
+</div>
+
+<!-- Search Bar (glassy) -->
+<div class="mb-5" style="background: rgba(255,255,255,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-radius: 1rem; padding: 0.5rem 1rem;">
+    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="🔍 Search universities..."
+        class="w-full bg-transparent text-sm focus:outline-none text-gray-700 placeholder-gray-400">
+</div>
+
+<!-- Filter Tabs (glassy pill row) -->
+<div class="flex gap-2 flex-wrap mb-6">
+    <button onclick="setFilter('all', this)" class="filter-btn active-filter px-4 py-1.5 rounded-full text-sm font-medium border">All</button>
+    <button onclick="setFilter('public', this)" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 text-gray-600"
+        style="background: rgba(255,255,255,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">Public</button>
+    <button onclick="setFilter('private', this)" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 text-gray-600"
+        style="background: rgba(255,255,255,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">Private</button>
+    <button onclick="setFilter('international', this)" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 text-gray-600"
+        style="background: rgba(255,255,255,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">International</button>
+    <button onclick="setFilter('cbhe', this)" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 text-gray-600"
+        style="background: rgba(255,255,255,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">CBHE</button>
+</div>
+
+<!-- University Cards (glassy) -->
 <div class="flex flex-col gap-4" id="uniList">
     {% for uni in universities %}
     <a href="/university/{{ uni.id }}" data-type="{{ uni.type or 'private' }}"
-        class="uni-card bg-white rounded-xl shadow p-5 hover:shadow-md transition block">
+        class="uni-card block rounded-2xl p-5 hover:shadow-lg transition"
+        style="background: rgba(255,255,255,0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
         <div class="flex justify-between items-start">
             <div>
                 <h2 class="text-base font-semibold text-blue-700">{{ uni.name }}</h2>
-                <p class="text-xs text-gray-400 mt-1">📍 {{ uni.location }}</p>
+                <p class="text-xs text-gray-500 mt-1">📍 {{ uni.location }}</p>
                 <p class="text-xs text-blue-400 mt-1">{{ uni.website }}</p>
             </div>
-            <div class="flex flex-col items-end gap-2">
+            <div class="flex flex-col items-end gap-2 shrink-0 ml-3">
                 {% if uni.type == 'public' %}
                 <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">Public</span>
                 {% elif uni.type == 'international' %}
@@ -35,16 +86,21 @@
                 {% else %}
                 <span class="bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full">Private</span>
                 {% endif %}
-                <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">{{ uni.short_name }}</span>
+                <span class="bg-blue-50 text-blue-600 text-xs font-bold px-3 py-1 rounded-full">{{ uni.short_name }}</span>
             </div>
         </div>
-        <div class="mt-3 text-sm text-blue-600 font-medium">View details →</div>
+        <div class="mt-3 text-sm text-blue-600 font-semibold">View details →</div>
     </a>
     {% endfor %}
 </div>
 
 <style>
-.active-filter { background-color: #1d4ed8; color: white; border-color: #1d4ed8; }
+.active-filter {
+    background-color: #1d4ed8 !important;
+    color: white !important;
+    border-color: #1d4ed8 !important;
+    backdrop-filter: none !important;
+}
 </style>
 
 <script>
@@ -54,10 +110,8 @@ function setFilter(type, btn) {
     activeFilter = type;
     document.querySelectorAll('.filter-btn').forEach(b => {
         b.classList.remove('active-filter');
-        b.classList.add('border-gray-200', 'text-gray-600');
     });
     btn.classList.add('active-filter');
-    btn.classList.remove('border-gray-200', 'text-gray-600');
     filterCards();
 }
 
