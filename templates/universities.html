@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- Slideshow Background (same as index.html) -->
+<!-- Slideshow Background -->
 <div id="bg-slideshow" class="fixed inset-0 -z-10">
     <div id="bg-slide" class="absolute inset-0 bg-cover bg-center"
         style="opacity: 0; transition: opacity 1s ease-in-out;"></div>
@@ -51,7 +51,7 @@ setInterval(nextSlide, 20000);
         class="w-full bg-transparent text-sm focus:outline-none text-gray-700 placeholder-gray-400">
 </div>
 
-<!-- Filter Tabs (glassy pill row) -->
+<!-- Filter Tabs -->
 <div class="flex gap-2 flex-wrap mb-6">
     <button onclick="setFilter('all', this)" class="filter-btn active-filter px-4 py-1.5 rounded-full text-sm font-medium border">All</button>
     <button onclick="setFilter('public', this)" class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 text-gray-600"
@@ -113,6 +113,7 @@ function setFilter(type, btn) {
     });
     btn.classList.add('active-filter');
     filterCards();
+    sessionStorage.setItem('uniFilter', type);
 }
 
 function filterCards() {
@@ -122,7 +123,45 @@ function filterCards() {
         const matchText = card.innerText.toLowerCase().includes(q);
         card.style.display = matchType && matchText ? '' : 'none';
     });
+    sessionStorage.setItem('uniSearch', document.getElementById('searchInput').value);
 }
+
+// Save scroll position when clicking a university
+document.querySelectorAll('.uni-card').forEach(card => {
+    card.addEventListener('click', () => {
+        sessionStorage.setItem('uniScrollY', window.scrollY);
+    });
+});
+
+// Restore scroll, search, and filter on page load
+window.addEventListener('DOMContentLoaded', () => {
+    const savedSearch = sessionStorage.getItem('uniSearch');
+    const savedFilter = sessionStorage.getItem('uniFilter');
+    const savedScroll = sessionStorage.getItem('uniScrollY');
+
+    if (savedSearch) {
+        document.getElementById('searchInput').value = savedSearch;
+    }
+
+    if (savedFilter && savedFilter !== 'all') {
+        activeFilter = savedFilter;
+        const btn = [...document.querySelectorAll('.filter-btn')]
+            .find(b => b.textContent.trim().toLowerCase() === savedFilter);
+        if (btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+            btn.classList.add('active-filter');
+        }
+    }
+
+    filterCards();
+
+    if (savedScroll) {
+        setTimeout(() => {
+            window.scrollTo(0, parseInt(savedScroll));
+            sessionStorage.removeItem('uniScrollY');
+        }, 50);
+    }
+});
 </script>
 
 {% endblock %}
